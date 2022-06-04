@@ -28,6 +28,8 @@ import springDAO.ProductDao;
 import springDAO.ProductDaoImpl;
 import springDAO.ProductLinesDao;
 import springDAO.ProductLinesDaoImpl;
+import springDAO.TestOfficeDao;
+import springDAO.TestOfficeDaoImpl;
 
 @Configuration
 @ComponentScan(basePackages="SpringMVC.ClassicModels")
@@ -90,5 +92,9 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter{
     public OrderDetailDao getOrderDetailDAO() {
     	return new OrderDetailDaoImpl(getDataSource());
     }
+    @Bean
+    public TestOfficeDao getTestOfficeDAO() {
+    	return new TestOfficeDaoImpl(getDataSource());
+    }    
 
 }

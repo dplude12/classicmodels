@@ -13,43 +13,15 @@ import org.springframework.jdbc.core.RowMapper;
 
 import springModel.Office;
 
-public class OfficeDaoImpl implements OfficeDao {
+public class TestOfficeDaoImpl implements TestOfficeDao {
 
 	private JdbcTemplate jdbcTemplate;
 
-	public OfficeDaoImpl(DataSource dataSource) {
+	public TestOfficeDaoImpl(DataSource dataSource) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	 
-	@Override
-	public void saveOrUpdate(Office rec) {
-        // implementation details goes here...
-	    if (rec.getOfficeID() > 0) {
-	        // update
-	    	String sql = "UPDATE offices SET officeCode=?, city=?, phone=?, addressLine1=?, addressLine2=?, state=?, postalCode=?, country=?, territory=?  "
-	                    + "WHERE officeID=?";
-	        jdbcTemplate.update(sql, rec.getOfficeCode(), rec.getCity(), rec.getPhone(), rec.getAddressLine1(), 
-	        		rec.getAddressLine2(), rec.getState(), rec.getPostalCode(), rec.getCountry(), rec.getTerritory(),rec.getOfficeID());
-	        
-	    } else {
-	        // insert
-	    	
-	    	String sql = "INSERT INTO offices (officeCode, city, phone, addressLine1, addressLine2, state, postalCode, country, territory)"
-	                    + " VALUES (?, ?, ?,?, ?, ?,?, ?, ?)";
-	        jdbcTemplate.update(sql, rec.getOfficeCode(), rec.getCity(), rec.getPhone(), rec.getAddressLine1(), 
-	        		rec.getAddressLine2(), rec.getState(), rec.getPostalCode(), rec.getCountry(), rec.getTerritory());
-	                
-	    }
-	 
-    }
- 
-	@Override
-    public void delete(int officeId) {
-        // implementation details goes here...
-		String sql = "DELETE FROM offices WHERE officeID=?";
-		jdbcTemplate.update(sql, officeId);
-    }
-    
+
+
     
 	@Override
 	public Office get(int officeId) {
@@ -79,13 +51,44 @@ public class OfficeDaoImpl implements OfficeDao {
 		        }
 		 
 		    });
-		}
+
+	}
 	
+
 	@Override
-	public List<Office> officeList() {
+	public Office getOfficeByCountry(String country) {
+		// TODO Auto-generated method stub
+		   String sql = "SELECT * FROM offices WHERE country = '" + country + "'";
+		    return jdbcTemplate.query(sql, new ResultSetExtractor<Office>() {
+		 
+		        @Override
+		        public Office extractData(ResultSet rs) throws SQLException,
+		                DataAccessException {
+		            if (rs.next()) {
+		            	Office rec = new Office();
+						rec.setOfficeID(rs.getInt("officeID"));
+						rec.setOfficeCode(rs.getString("officeCode"));
+						rec.setCity(rs.getString("city"));
+						rec.setPhone(rs.getString("phone"));
+						rec.setAddressLine1(rs.getString("addressLine1"));
+						rec.setAddressLine2(rs.getString("addressLine2"));
+						rec.setState(rs.getString("state"));
+						rec.setCountry(rs.getString("country"));
+						rec.setPostalCode(rs.getString("postalCode"));
+						rec.setTerritory(rs.getString("territory"));
+		                return rec;
+		            }
+		 
+		            return null;
+		        }
+		    });
+
+	} 
+
+	public List<Office> officeListByCountry(String country) {
 		// TODO Auto-generated method stub
 
-	    String sql = "SELECT * FROM offices";
+	    String sql = "SELECT * FROM offices WHERE country = '" + country + "'";
 	    List<Office> listOffices = jdbcTemplate.query(sql, new RowMapper<Office>() {
 	    	 
 	        
@@ -107,5 +110,6 @@ public class OfficeDaoImpl implements OfficeDao {
 	 
 	    return listOffices;
 	}
+
 
 }
