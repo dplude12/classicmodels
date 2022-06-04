@@ -29,7 +29,9 @@
         <a href="orderList">Orders</a> 
         <br> 
         <a href="orderDetailList">Order Details</a> 
-        </center>
+		<br> 
+        <a href="TestOffice.jsp">Test Office page</a> 
+                </center>
         
     </body>
 </html>
